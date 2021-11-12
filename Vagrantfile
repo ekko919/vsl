@@ -110,12 +110,12 @@ Vagrant.configure("2") do |config|
 	config.vm.box_check_update = true
 	#config.hostmanager.enabled = false
 	#config.hostmanager.manage_host = false
-  #config.hostmanager.manage_guest = false
-  #config.hostmanager.ignore_private_ip = false
-  #config.hostmanager.include_offline = false
-  #config.ssh.insert_key = false
-  #config.ssh.private_key_path = ["keys/.ssh/vagrant_rsa", "~/.vagrant.d/insecure_private_key"]
-  #config.vm.provision "file", source: "keys/.ssh/vagrant_rsa.pub", destination: "~/.ssh/authorized_keys"
+  	#config.hostmanager.manage_guest = false
+  	#config.hostmanager.ignore_private_ip = false
+  	#config.hostmanager.include_offline = false
+  	#config.ssh.insert_key = false
+  	#config.ssh.private_key_path = ["keys/.ssh/vagrant_rsa", "~/.vagrant.d/insecure_private_key"]
+  	#config.vm.provision "file", source: "keys/.ssh/vagrant_rsa.pub", destination: "~/.ssh/authorized_keys"
 
 #############################################
 #      AUTOMATION SERVER CONFIGURATION      #
