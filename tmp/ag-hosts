@@ -3,15 +3,14 @@
 
 
 ### vagrant-hostmanager-start ###
-172.16.100.10   otto-svr
-172.16.100.21   centos-01
-172.16.100.22   centos-02
-172.16.100.31   oracle-01
-172.16.100.32   oracle-02
-172.16.100.41   ubuntu-01
-172.16.100.42   ubuntu-02
-172.16.100.51	  suse-01
-172.16.100.52	  suse-02
-172.16.100.99	  pvu-99
+172.16.100.10    otto-svr.vsl.lab   otto-svr
+172.16.100.21    centos-01.vsl.lab   centos-01
+172.16.100.22    centos-02.vsl.lab   centos-02
+172.16.100.31    oracle-01.vsl.lab   oracle-01
+172.16.100.32    oracle-02.vsl.lab   oracle-02
+172.16.100.41    ubuntu-01.vsl.lab   ubuntu-01
+172.16.100.42    ubuntu-02.vsl.lab   ubuntu-02
+172.16.100.51    suse-01.vsl.lab   suse-01
+172.16.100.52    suse-02.vsl.lab   suse-02
+172.16.100.99    pvu-99.vsl.lab   pvu-99
 ### vagrant-hostmanager-end ###
-

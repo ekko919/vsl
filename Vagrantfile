@@ -124,7 +124,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "otto-svr" do |vm1|
   		vm1.vm.network :forwarded_port, guest: 22, host: 2201, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       	vm1.vm.hostname = "otto-svr"
-    	vm1.vm.box = "bento/centos-7.8"
+    	vm1.vm.box = "bento/centos-7.9"
     	vm1.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm1.vm.synced_folder "tmp", "/media/tmp", create: true
       		owner = "vagrant", group = "vboxsf"
@@ -220,7 +220,7 @@ Vagrant.configure("2") do |config|
     	vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     	vm2.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       vm2.vm.hostname = "centos-01"
-    	vm2.vm.box = "bento/centos-7.8"
+    	vm2.vm.box = "bento/centos-7.9"
     	vm2.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm2.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
@@ -298,7 +298,7 @@ Vagrant.configure("2") do |config|
     	vm3.vm.network :forwarded_port, guest: 22, host: 2203, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       vm3.vm.network :forwarded_port, guest: 80, host: 8082, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       vm3.vm.hostname = "centos-02"
-    	vm3.vm.box = "bento/centos-7.8"
+    	vm3.vm.box = "bento/centos-7.9"
     	vm3.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm3.vm.synced_folder "tmp", "/media/tmp", automount: true
         owner = "vagrant", group = "vboxsf"
@@ -374,7 +374,7 @@ Vagrant.configure("2") do |config|
   	config.vm.define "oracle-01" do |vm4|
     	vm4.vm.network :forwarded_port, guest: 22, host: 2204, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       vm4.vm.hostname = "oracle-01"
-    	vm4.vm.box = "bento/oracle-7.8"
+    	vm4.vm.box = "bento/oracle-7.9"
     	vm4.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm4.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
@@ -451,7 +451,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "oracle-02" do |vm5|
       vm5.vm.network :forwarded_port, guest: 22, host: 2205, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       vm5.vm.hostname = "oracle-02"
-      vm5.vm.box = "bento/oracle-7.8"
+      vm5.vm.box = "bento/oracle-7.9"
       vm5.vm.synced_folder ".", "/vagrant", disabled: true 
       vm5.vm.synced_folder "tmp", "/media/tmp", create: true
         owner = "vagrant", group = "vboxsf"
