@@ -110,12 +110,12 @@ Vagrant.configure("2") do |config|
 	config.vm.box_check_update = true
 	#config.hostmanager.enabled = false
 	#config.hostmanager.manage_host = false
-  #config.hostmanager.manage_guest = false
-  #config.hostmanager.ignore_private_ip = false
-  #config.hostmanager.include_offline = false
-  #config.ssh.insert_key = false
-  #config.ssh.private_key_path = ["keys/.ssh/vagrant_rsa", "~/.vagrant.d/insecure_private_key"]
-  #config.vm.provision "file", source: "keys/.ssh/vagrant_rsa.pub", destination: "~/.ssh/authorized_keys"
+  	#config.hostmanager.manage_guest = false
+  	#config.hostmanager.ignore_private_ip = false
+  	#config.hostmanager.include_offline = false
+  	#config.ssh.insert_key = false
+  	#config.ssh.private_key_path = ["keys/.ssh/vagrant_rsa", "~/.vagrant.d/insecure_private_key"]
+  	#config.vm.provision "file", source: "keys/.ssh/vagrant_rsa.pub", destination: "~/.ssh/authorized_keys"
 
 #############################################
 #      AUTOMATION SERVER CONFIGURATION      #
@@ -124,7 +124,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "otto-svr" do |vm1|
   		vm1.vm.network :forwarded_port, guest: 22, host: 2201, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       	vm1.vm.hostname = "otto-svr"
-    	vm1.vm.box = "bento/centos-7.8"
+    	vm1.vm.box = "bento/centos-7.9"
     	vm1.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm1.vm.synced_folder "tmp", "/media/tmp", create: true
       		owner = "vagrant", group = "vboxsf"
@@ -298,7 +298,7 @@ Vagrant.configure("2") do |config|
     	vm3.vm.network :forwarded_port, guest: 22, host: 2203, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       vm3.vm.network :forwarded_port, guest: 80, host: 8082, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       vm3.vm.hostname = "centos-02"
-    	vm3.vm.box = "bento/centos-7.8"
+    	vm3.vm.box = "bento/centos-7.9"
     	vm3.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm3.vm.synced_folder "tmp", "/media/tmp", automount: true
         owner = "vagrant", group = "vboxsf"
