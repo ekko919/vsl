@@ -1,16 +1,17 @@
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+# IP Addr.      Simple          FQDN
+127.0.0.1       localhost       localhost.localdomain
 
 
 
 ### vagrant-hostmanager-start ###
-172.16.100.10    otto-svr.vsl.lab   otto-svr
-172.16.100.21    centos-01.vsl.lab   centos-01
-172.16.100.22    centos-02.vsl.lab   centos-02
-172.16.100.31    oracle-01.vsl.lab   oracle-01
-172.16.100.32    oracle-02.vsl.lab   oracle-02
-172.16.100.41    ubuntu-01.vsl.lab   ubuntu-01
-172.16.100.42    ubuntu-02.vsl.lab   ubuntu-02
-172.16.100.51    suse-01.vsl.lab   suse-01
-172.16.100.52    suse-02.vsl.lab   suse-02
-172.16.100.99    pvu-99.vsl.lab   pvu-99
+172.16.100.10   otto-svr        otto-svr.vsl.lab
+172.16.100.21   centos-01       centos-01.vsl.lab
+172.16.100.22   centos-02       centos-02.vsl.lab
+172.16.100.31   oracle-01       oracle-01.vsl.lab
+172.16.100.32   oracle-02       oracle-02.vsl.lab
+172.16.100.41   ubuntu-01       ubuntu-01.vsl.lab
+172.16.100.42   ubuntu-02       ubuntu-02.vsl.lab
+172.16.100.51   suse-01         suse-01.vsl.lab
+172.16.100.52   suse-02         suse-02.vsl.lab
+172.16.100.99   pvu-99          pvu-99.vsl.lab
 ### vagrant-hostmanager-end ###
