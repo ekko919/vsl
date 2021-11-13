@@ -3,7 +3,6 @@
 127.0.0.1       localhost       localhost.localdomain
 
 
-
 ### vagrant-hostmanager-start ###
 172.16.100.10   otto-svr        otto-svr.vsl.lab
 172.16.100.21   centos-01       centos-01.vsl.lab
