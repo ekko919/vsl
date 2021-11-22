@@ -123,7 +123,7 @@ Vagrant.configure("2") do |config|
   	
     config.vm.define "otto-svr" do |vm1|
   		vm1.vm.network :forwarded_port, guest: 22, host: 2201, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-      	vm1.vm.hostname = "otto-svr"
+      	vm1.vm.hostname = "otto-svr.vsl.lab"
     	vm1.vm.box = "bento/centos-7.9"
     	vm1.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm1.vm.synced_folder "tmp", "/media/tmp", create: true
@@ -174,7 +174,7 @@ Vagrant.configure("2") do |config|
        		yum -y install puppetserver
        		systemctl set-default multi-user.target
       		SHELL
-      	vm1.vm.synced_folder "env/dev/puppetlabs/code/", "/etc/puppetlabs/code/", create: false
+#      	vm1.vm.synced_folder "env/dev/puppetlabs/code/", "/etc/puppetlabs/code/", create: false
       		owner = "root", group = "root"
     	vm1.vm.provision "shell", inline: $puppet_path
     	vm1.vm.provision "shell", inline: $java_adj
@@ -219,8 +219,13 @@ Vagrant.configure("2") do |config|
   	config.vm.define "centos-01" do |vm2|
     	vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     	vm2.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
+<<<<<<< HEAD
       vm2.vm.hostname = "centos-01"
     	vm2.vm.box = "bento/centos-7.9"
+=======
+      vm2.vm.hostname = "centos-01.vsl.lab"
+    	vm2.vm.box = "bento/centos-7.8"
+>>>>>>> 94f202d1c3e76149f46509d50ace820a7bf07beb
     	vm2.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm2.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
@@ -297,7 +302,7 @@ Vagrant.configure("2") do |config|
   	config.vm.define "centos-02" do |vm3|
     	vm3.vm.network :forwarded_port, guest: 22, host: 2203, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
       vm3.vm.network :forwarded_port, guest: 80, host: 8082, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
-      vm3.vm.hostname = "centos-02"
+      vm3.vm.hostname = "centos-02.vsl.lab"
     	vm3.vm.box = "bento/centos-7.9"
     	vm3.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm3.vm.synced_folder "tmp", "/media/tmp", automount: true
@@ -373,7 +378,7 @@ Vagrant.configure("2") do |config|
     
   	config.vm.define "oracle-01" do |vm4|
     	vm4.vm.network :forwarded_port, guest: 22, host: 2204, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-      vm4.vm.hostname = "oracle-01"
+      vm4.vm.hostname = "oracle-01.vsl.lab"
     	vm4.vm.box = "bento/oracle-7.8"
     	vm4.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm4.vm.synced_folder "tmp", "/media/tmp", create: true
@@ -450,7 +455,7 @@ Vagrant.configure("2") do |config|
     
     config.vm.define "oracle-02" do |vm5|
       vm5.vm.network :forwarded_port, guest: 22, host: 2205, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-      vm5.vm.hostname = "oracle-02"
+      vm5.vm.hostname = "oracle-02.vsl.lab"
       vm5.vm.box = "bento/oracle-7.8"
       vm5.vm.synced_folder ".", "/vagrant", disabled: true 
       vm5.vm.synced_folder "tmp", "/media/tmp", create: true
@@ -527,7 +532,7 @@ Vagrant.configure("2") do |config|
     
   	config.vm.define "ubuntu-01" do |vm6|
       vm6.vm.network :forwarded_port, guest: 22, host: 2206, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-    	vm6.vm.hostname = "ubuntu-01"
+    	vm6.vm.hostname = "ubuntu-01.vsl.lab"
     	vm6.vm.box = "bento/ubuntu-18.04"
     	vm6.vm.synced_folder ".", "/vagrant", disabled: true
     	vm6.vm.synced_folder "tmp", "/media/tmp", create: true
@@ -605,7 +610,7 @@ Vagrant.configure("2") do |config|
     
     config.vm.define "ubuntu-02" do |vm7|
       vm7.vm.network :forwarded_port, guest: 22, host: 2207, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-      vm7.vm.hostname = "ubuntu-02"
+      vm7.vm.hostname = "ubuntu-02.vsl.lab"
       vm7.vm.box = "bento/ubuntu-18.04"
       vm7.vm.synced_folder ".", "/vagrant", disabled: true
       vm7.vm.synced_folder "tmp", "/media/tmp", create: true
@@ -682,7 +687,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "suse-01" do |vm8|
       vm8.vm.network :forwarded_port, guest: 22, host: 2208, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-      vm8.vm.hostname = "suse-01"
+      vm8.vm.hostname = "suse-01.vsl.lab"
       vm8.vm.box = "opensuse/Leap-15.2.x86_64"
       vm8.vm.synced_folder ".", "/vagrant", disabled: true
       vm8.vm.network "private_network",
@@ -759,7 +764,7 @@ Vagrant.configure("2") do |config|
 
 config.vm.define "suse-02" do |vm9|
 	vm9.vm.network :forwarded_port, guest: 22, host: 2209, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-	vm9.vm.hostname = "suse-02"
+	vm9.vm.hostname = "suse-02.vsl.lab"
 	vm9.vm.box = "opensuse/Leap-15.2.x86_64"
 	vm9.vm.synced_folder ".", "/vagrant", disabled: true
 	vm9.vm.network "private_network",
