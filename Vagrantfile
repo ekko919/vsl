@@ -220,7 +220,7 @@ Vagrant.configure("2") do |config|
     	vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     	vm2.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       vm2.vm.hostname = "centos-01"
-    	vm2.vm.box = "bento/centos-7.8"
+    	vm2.vm.box = "bento/centos-7.9"
     	vm2.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm2.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
@@ -532,10 +532,11 @@ Vagrant.configure("2") do |config|
     	vm6.vm.synced_folder ".", "/vagrant", disabled: true
     	vm6.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
-    	vm6.vm.network "private_network",
-    				        ip: "172.16.100.41",
-    				        netmask: "255.255.255.0",
-    				        gateway: "172.16.100.1"
+    	# If Guest Addition Fail to build Shares;  
+		# sudo apt install linux-headers-generic dkms & try again...
+			vm6.vm.network "private_network",
+							ip: "172.16.100.41",
+							name: "vboxnet0"
     	#vm6.hostmanager.aliases = %w(ubuntu-01)
     	vm6.vm.provider "virtualbox" do |vb|
       		vb.name = "Ubuntu_18.x (Client AG06)"
@@ -561,11 +562,11 @@ Vagrant.configure("2") do |config|
           vb.customize ["modifyvm", :id, 
                         "--cableconnected1", "on"
                      ]
-      		vb.customize ["modifyvm", :id,
-     		 		            "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                   		  "--intnet1", "Puppet_Network"
-                     ]
+			vb.customize ["modifyvm", :id,
+					 "--nictype2", "82540em",
+					 "--nic2", "natnetwork",
+					 "--nat-network1", "Puppet_Network"
+				  ]
     	end
     	vm6.vm.provision "shell", inline: $puppet_hosts
     	vm6.vm.provision "shell", inline: <<-SHELL
@@ -838,8 +839,7 @@ config.vm.define "pvu-99" do |vm99|
 	vm99.vm.synced_folder ".", "/vagrant", disabled: true
 	vm99.vm.network "private_network",
 				  ip: "172.16.100.99",
-				  netmask: "255.255.255.0",
-				  gateway: "172.16.100.1"
+				  name: "vboxnet0"
 	#vm99.hostmanager.aliases = %w(pvu-99)
 	vm99.vm.provider "virtualbox" do |vb|
 		vb.name = "PVU_99 (Client AG99)"
@@ -867,8 +867,8 @@ config.vm.define "pvu-99" do |vm99|
 				   ]
 		vb.customize ["modifyvm", :id,
 					  "--nictype2", "82540em",
-					  "--nic2", "intnet",
-					  "--intnet1", "Puppet_Network"
+					  "--nic2", "natnetwork",
+					  "--nat-network1", "Puppet_Network"
 				   ]
 	end
 	vm99.vm.synced_folder "tmp", "/media/tmp", create: true
