@@ -219,13 +219,8 @@ Vagrant.configure("2") do |config|
   	config.vm.define "centos-01" do |vm2|
     	vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     	vm2.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
-<<<<<<< HEAD
-      vm2.vm.hostname = "centos-01"
-    	vm2.vm.box = "bento/centos-7.9"
-=======
       vm2.vm.hostname = "centos-01.vsl.lab"
     	vm2.vm.box = "bento/centos-7.8"
->>>>>>> 94f202d1c3e76149f46509d50ace820a7bf07beb
     	vm2.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm2.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
@@ -892,19 +887,10 @@ config.vm.define "pvu-99" do |vm99|
 		echo Done.
 		SHELL
 	vm99.vm.provision "shell", inline: <<-SHELL
-		#yum --no-gpg-checks in -y puppet-agent
+	
 		systemctl set-default multi-user.target
 		SHELL
 	vm99.vm.provision "shell", inline: $resolv_conf
-	#vm99.vm.provision "shell", inline: $puppet_conf
-	#vm99.vm.provision "shell", inline: <<-SHELL
-	#	echo starting Puppet Agent
-	#	systemctl start puppet
-	#	echo enabling Puppet Agent
-	#	systemctl enable puppet
-	#	echo Puppet Agent started and enabled...
-	#	echo ...
-	#	echo Done.
-	#	SHELL
+
   end
 end
