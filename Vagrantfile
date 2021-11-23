@@ -220,7 +220,7 @@ Vagrant.configure("2") do |config|
     	vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
     	vm2.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       vm2.vm.hostname = "centos-01.vsl.lab"
-    	vm2.vm.box = "bento/centos-7.8"
+    	vm2.vm.box = "bento/centos-7.9"
     	vm2.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm2.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
@@ -830,6 +830,8 @@ config.vm.define "pvu-99" do |vm99|
 	vm99.vm.hostname = "pvu-99" 
 	vm99.vm.box = "bento/rockylinux-8.4"
 	vm99.vm.synced_folder ".", "/vagrant", disabled: true
+	# Rocky Linux Guest Additions Failure to load...
+	# Run as root: yum install elfutils-libelf-devel -y
 	vm99.vm.network "private_network",
 				  ip: "172.16.100.99",
 				  name: "vboxnet0"
