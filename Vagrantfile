@@ -159,8 +159,8 @@ Vagrant.configure("2") do |config|
                      ]
       		vb.customize ["modifyvm", :id,
      		 		            "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                   		  "--intnet1", "Puppet_Network"
+                        		"--nic2", "intnet",
+                   		  		"--intnet1", "Puppet_Network"
                      ]
     	end
     	vm1.vm.provision "shell", inline: $disable_ipv6
@@ -226,8 +226,7 @@ Vagrant.configure("2") do |config|
     		owner = "vagrant", group = "vboxsf"
     	vm2.vm.network "private_network",
     				        ip: "172.16.100.21",
-    				        netmask: "255.255.255.0",
-    				        gateway: "172.16.100.1"
+    				        name: "vboxnet0"
     	#vm2.hostmanager.aliases = %w (centos-01)
     	vm2.vm.provider "virtualbox" do |vb|
       		vb.name = "CentOS_7.x (Client AG02)"
@@ -254,9 +253,9 @@ Vagrant.configure("2") do |config|
                         "--cableconnected1", "on"
                      ]
       		vb.customize ["modifyvm", :id,
-     		 		            "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                   		  "--intnet1", "Puppet_Network"
+     		 		    "--nictype2", "82540em",
+						"--nic2", "natnetwork",
+						"--nat-network1", "Puppet_Network"
                      ]
     	end
       vm2.vm.provision "shell", inline: $puppet_hosts
@@ -304,8 +303,7 @@ Vagrant.configure("2") do |config|
         owner = "vagrant", group = "vboxsf"
      	vm3.vm.network "private_network",
     				        ip: "172.16.100.22",
-    				        netmask: "255.255.255.0",
-    				        gateway: "172.16.100.1"
+    				        name: "vboxnet0"
     	#vm3.hostmanager.aliases = %w(centos-02)
     	vm3.vm.provider "virtualbox" do |vb|
       		vb.name = "CentOS_7.x (Client AG03)"
@@ -332,9 +330,9 @@ Vagrant.configure("2") do |config|
       					        "--cableconnected1", "on"
                    	 ]
       		vb.customize ["modifyvm", :id,
-     		 		            "--nictype2", "82540em",
-     				            "--nic2", "intnet",
-                   		  "--intnet1", "Puppet_Network"
+     		 		    "--nictype2", "82540em",
+						"--nic2", "natnetwork",
+						"--nat-network1", "Puppet_Network"
                      ]
     	end
     	vm3.vm.provision "shell", inline: $puppet_hosts
@@ -380,8 +378,7 @@ Vagrant.configure("2") do |config|
     		owner = "vagrant", group = "vboxsf"
     	vm4.vm.network "private_network",
     				        ip: "172.16.100.31",
-    				        netmask: "255.255.255.0",
-    				        gateway: "172.16.100.1"
+    				        name: "vboxnet0"
     	#vm4.hostmanager.aliases = %w(oracle-lnx01)
     	vm4.vm.provider "virtualbox" do |vb|
       		vb.name = "Oracle Linux 7.x (Client AG04)"
@@ -409,8 +406,8 @@ Vagrant.configure("2") do |config|
                      ]
       		vb.customize ["modifyvm", :id,
      		 		            "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                        "--intnet1", "Puppet_Network"
+                        "--nic2", "natnetwork",
+					  	"--nat-network1", "Puppet_Network"
                      ]
     	end
     	vm4.vm.provision "shell", inline: $puppet_hosts
@@ -457,8 +454,7 @@ Vagrant.configure("2") do |config|
         owner = "vagrant", group = "vboxsf"
       vm5.vm.network "private_network",
                     ip: "172.16.100.32",
-                    netmask: "255.255.255.0",
-                    gateway: "172.16.100.1"
+                    name: "vboxnet0"
       #vm5.hostmanager.aliases = %w(oracle-lnx2)
       vm5.vm.provider "virtualbox" do |vb|
           vb.name = "Oracle Linux 7.x (Client AG05)"
@@ -486,8 +482,8 @@ Vagrant.configure("2") do |config|
                      ]
           vb.customize ["modifyvm", :id,
                         "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                        "--intnet1", "Puppet_Network"
+                        "--nic2", "natnetwork",
+					  	"--nat-network1", "Puppet_Network"
                      ]
       end
       vm5.vm.provision "shell", inline: $puppet_hosts
@@ -612,8 +608,7 @@ Vagrant.configure("2") do |config|
         owner = "vagrant", group = "vboxsf"
       vm7.vm.network "private_network",
                     ip: "172.16.100.42",
-                    netmask: "255.255.255.0",
-                    gateway: "172.16.100.1"
+                    name: "vboxnet0"
       #vm7.hostmanager.aliases = %w(ubuntu-02)
       vm7.vm.provider "virtualbox" do |vb|
           vb.name = "Ubuntu_18.x (Client AG07)"
@@ -641,8 +636,8 @@ Vagrant.configure("2") do |config|
                      ]
           vb.customize ["modifyvm", :id,
                         "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                        "--intnet1", "Puppet_Network"
+                        "--nic2", "natnetwork",
+					  	"--nat-network1", "Puppet_Network"
                      ]
       end
       vm7.vm.provision "shell", inline: $puppet_hosts
@@ -687,8 +682,7 @@ Vagrant.configure("2") do |config|
       vm8.vm.synced_folder ".", "/vagrant", disabled: true
       vm8.vm.network "private_network",
                     ip: "172.16.100.51",
-                    netmask: "255.255.255.0",
-                    gateway: "172.16.100.1"
+                    name: "vboxnet0"
       #vm8.hostmanager.aliases = %w(suse-01)
       vm8.vm.provider "virtualbox" do |vb|
           vb.name = "openSUSE_15.x (Client AG08)"
@@ -716,8 +710,8 @@ Vagrant.configure("2") do |config|
                      ]
           vb.customize ["modifyvm", :id,
                         "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                        "--intnet1", "Puppet_Network"
+                        "--nic2", "natnetwork",
+					  	"--nat-network1", "Puppet_Network"
                      ]
       end
       vm8.vm.synced_folder "tmp", "/media/tmp", create: true
@@ -764,8 +758,7 @@ config.vm.define "suse-02" do |vm9|
 	vm9.vm.synced_folder ".", "/vagrant", disabled: true
 	vm9.vm.network "private_network",
 				  ip: "172.16.100.52",
-				  netmask: "255.255.255.0",
-				  gateway: "172.16.100.1"
+				  name: "vboxnet0"
 	#vm9.hostmanager.aliases = %w(suse-02)
 	vm9.vm.provider "virtualbox" do |vb|
 		vb.name = "openSUSE_15.x (Client AG09)"
@@ -793,8 +786,8 @@ config.vm.define "suse-02" do |vm9|
 				   ]
 		vb.customize ["modifyvm", :id,
 					  "--nictype2", "82540em",
-					  "--nic2", "intnet",
-					  "--intnet1", "Puppet_Network"
+					  "--nic2", "natnetwork",
+					  "--nat-network1", "Puppet_Network"
 				   ]
 	end
 	vm9.vm.synced_folder "tmp", "/media/tmp", create: true
