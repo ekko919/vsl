@@ -118,16 +118,18 @@ Vagrant.configure("2") do |config|
 #############################################
   	
     config.vm.define "otto-svr" do |vm1|
-  		vm1.vm.network :forwarded_port, guest: 22, host: 2200, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+  		vm1.vm.network :forwarded_port, guest: 22, host: 2201, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm1.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm1.vm.hostname = "otto-svr.vsl.lab"
     	vm1.vm.box = "bento/centos-7.9"
     	vm1.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm1.vm.synced_folder "tmp", "/media/tmp", create: true
-      		owner = "vagrant", group = "vboxsf"
+			owner = "vagrant", group = "vboxsf"
+#      	vm1.vm.synced_folder "env/dev/puppetlabs/code/", "/etc/puppetlabs/code/", create: false
+#      		owner = "root", group = "root"
     	vm1.vm.network "private_network",
-    				    ip: "172.16.100.10",
-    				    netmask: "255.255.255.0",
-    				    gateway: "172.16.100.1"
+    				    ip: "172.16.100.11",
+    				    name: "vboxnet0"
     	vm1.vm.provider "virtualbox" do |vb|
       		vb.name = "CentOS_7.x (Otto SVR)"
       		vb.gui = false
@@ -154,10 +156,10 @@ Vagrant.configure("2") do |config|
                      	]
       		vb.customize ["modifyvm", :id,
      		 		    "--nictype2", "82540em",
-                        "--nic2", "intnet",
-                   		"--intnet1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
-                     	]
+						"--nic2", "natnetwork",
+						"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
+						]
     		end
     	vm1.vm.provision "shell", inline: $disable_ipv6
     	vm1.vm.provision "shell", inline: 'sysctl -p'
@@ -170,8 +172,6 @@ Vagrant.configure("2") do |config|
        		yum -y install puppetserver
        		systemctl set-default multi-user.target
       		SHELL
-#      	vm1.vm.synced_folder "env/dev/puppetlabs/code/", "/etc/puppetlabs/code/", create: false
-#      		owner = "root", group = "root"
     	vm1.vm.provision "shell", inline: $puppet_path
     	vm1.vm.provision "shell", inline: $java_adj
     	vm1.vm.provision "shell", inline: $puppet_svr_conf
@@ -213,18 +213,18 @@ Vagrant.configure("2") do |config|
 #############################################
     
   	config.vm.define "centos-01" do |vm2|
-    	vm2.vm.network :forwarded_port, guest: 22, host: 2201, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-    #	vm2.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
+    	vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm2.vm.network :forwarded_port, guest: 80, host: 8082, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm2.vm.hostname = "centos-01.vsl.lab"
     	vm2.vm.box = "bento/centos-7.9"
     	vm2.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm2.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
     	vm2.vm.network "private_network",
-    				    ip: "172.16.100.21",
+    				    ip: "172.16.100.12",
     				    name: "vboxnet0"
     	vm2.vm.provider "virtualbox" do |vb|
-      		vb.name = "CentOS_7.x (Client AG01)"
+      		vb.name = "CentOS_7.x (Client AG02)"
       		vb.gui = false
       		vb.memory = "2048"
       		vb.cpus = 1
@@ -250,8 +250,8 @@ Vagrant.configure("2") do |config|
       		vb.customize ["modifyvm", :id,
      		 		    "--nictype2", "82540em",
 						"--nic2", "natnetwork",
-						"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+						"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
                      	]
     		end
       	vm2.vm.provision "shell", inline: $puppet_hosts
@@ -290,18 +290,18 @@ Vagrant.configure("2") do |config|
 #############################################
     
   	config.vm.define "centos-02" do |vm3|
-    	vm3.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-      	vm3.vm.network :forwarded_port, guest: 80, host: 8082, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
+    	vm3.vm.network :forwarded_port, guest: 22, host: 2203, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+      	vm3.vm.network :forwarded_port, guest: 80, host: 8083, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm3.vm.hostname = "centos-02.vsl.lab"
     	vm3.vm.box = "bento/centos-7.9"
     	vm3.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm3.vm.synced_folder "tmp", "/media/tmp", automount: true
         	owner = "vagrant", group = "vboxsf"
      	vm3.vm.network "private_network",
-    				    ip: "172.16.100.22",
+    				    ip: "172.16.100.13",
     				    name: "vboxnet0"
     	vm3.vm.provider "virtualbox" do |vb|
-      		vb.name = "CentOS_7.x (Client AG02)"
+      		vb.name = "CentOS_7.x (Client AG03)"
       		vb.gui = false
       		vb.memory = "2048"
       		vb.cpus = 1
@@ -327,8 +327,8 @@ Vagrant.configure("2") do |config|
       		vb.customize ["modifyvm", :id,
      		 		    "--nictype2", "82540em",
 						"--nic2", "natnetwork",
-						"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+						"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
                      	]
     		end
     	vm3.vm.provision "shell", inline: $puppet_hosts
@@ -367,17 +367,18 @@ Vagrant.configure("2") do |config|
 #############################################
     
   	config.vm.define "oracle-01" do |vm4|
-    	vm4.vm.network :forwarded_port, guest: 22, host: 2203, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+    	vm4.vm.network :forwarded_port, guest: 22, host: 2204, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm4.vm.network :forwarded_port, guest: 80, host: 8084, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm4.vm.hostname = "oracle-01.vsl.lab"
     	vm4.vm.box = "bento/oracle-7.8"
     	vm4.vm.synced_folder ".", "/vagrant", disabled: true 
     	vm4.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
     	vm4.vm.network "private_network",
-    				    ip: "172.16.100.31",
+    				    ip: "172.16.100.14",
     				    name: "vboxnet0"
     	vm4.vm.provider "virtualbox" do |vb|
-      		vb.name = "Oracle Linux 7.x (Client AG03)"
+      		vb.name = "Oracle Linux 7.x (Client AG04)"
       		vb.gui = false
       		vb.memory = "1024"
       		vb.cpus = 1
@@ -403,12 +404,12 @@ Vagrant.configure("2") do |config|
       		vb.customize ["modifyvm", :id,
      		 		    "--nictype2", "82540em",
                         "--nic2", "natnetwork",
-					  	"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+					  	"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
                      	]
     		end
     	vm4.vm.provision "shell", inline: $puppet_hosts
-    	vm4.vm.provision "shell", args: "y", inline: <<-SHELL
+    	vm4.vm.provision "shell", inline: <<-SHELL
           	yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
           	yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
           	yum -y install nano gcc make perl kernel-devel
@@ -444,17 +445,18 @@ Vagrant.configure("2") do |config|
 #############################################
     
     config.vm.define "oracle-02" do |vm5|
-      	vm5.vm.network :forwarded_port, guest: 22, host: 2204, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+      	vm5.vm.network :forwarded_port, guest: 22, host: 2205, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm5.vm.network :forwarded_port, guest: 80, host: 8085, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm5.vm.hostname = "oracle-02.vsl.lab"
       	vm5.vm.box = "bento/oracle-7.8"
       	vm5.vm.synced_folder ".", "/vagrant", disabled: true 
       	vm5.vm.synced_folder "tmp", "/media/tmp", create: true
         	owner = "vagrant", group = "vboxsf"
       	vm5.vm.network "private_network",
-                	ip: "172.16.100.32",
+                	ip: "172.16.100.15",
                     name: "vboxnet0"
       	vm5.vm.provider "virtualbox" do |vb|
-          	vb.name = "Oracle Linux 7.x (Client AG04)"
+          	vb.name = "Oracle Linux 7.x (Client AG05)"
           	vb.gui = false
           	vb.memory = "1024"
           	vb.cpus = 1
@@ -480,10 +482,16 @@ Vagrant.configure("2") do |config|
           	vb.customize ["modifyvm", :id,
                         "--nictype2", "82540em",
                         "--nic2", "natnetwork",
-					  	"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+					  	"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
                      	]
       		end
+		vm5.vm.provision "shell", inline: <<-SHELL
+		  	yum check-update
+			yum upgrade -y
+			yum install -y kernel-uek-headers-$(uname -r)
+			yum install -y kernel-uek-devel-$(uname -r) 
+		  	SHELL
       	vm5.vm.provision "shell", inline: $puppet_hosts
       	vm5.vm.provision "shell", args: "y", inline: <<-SHELL
           	yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
@@ -521,19 +529,18 @@ Vagrant.configure("2") do |config|
 #############################################
     
   	config.vm.define "ubuntu-01" do |vm6|
-      	vm6.vm.network :forwarded_port, guest: 22, host: 2205, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+      	vm6.vm.network :forwarded_port, guest: 22, host: 2206, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm6.vm.network :forwarded_port, guest: 80, host: 8086, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
     	vm6.vm.hostname = "ubuntu-01.vsl.lab"
     	vm6.vm.box = "bento/ubuntu-18.04"
     	vm6.vm.synced_folder ".", "/vagrant", disabled: true
     	vm6.vm.synced_folder "tmp", "/media/tmp", create: true
     		owner = "vagrant", group = "vboxsf"
-    	# If Guest Addition Fail to build Shares;  
-		# sudo apt install linux-headers-generic dkms & try again...
 		vm6.vm.network "private_network",
-						ip: "172.16.100.41",
+						ip: "172.16.100.16",
 						name: "vboxnet0"
     	vm6.vm.provider "virtualbox" do |vb|
-      		vb.name = "Ubuntu_18.x (Client AG05)"
+      		vb.name = "Ubuntu_18.x (Client AG06)"
       		vb.gui = false
       		vb.memory = "1024"
       		vb.cpus = 1
@@ -559,10 +566,14 @@ Vagrant.configure("2") do |config|
 			vb.customize ["modifyvm", :id,
 					 	"--nictype2", "82540em",
 					 	"--nic2", "natnetwork",
-					 	"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+					 	"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
 				  		]
     		end
+		vm6.vm.provision "shell", inline: <<-SHELL
+			apt update
+		  	apt install -y linux-headers-generic dkms
+			SHELL
     	vm6.vm.provision "shell", inline: $puppet_hosts
     	vm6.vm.provision "shell", inline: <<-SHELL
       		wget https://apt.puppetlabs.com/puppet6-release-stretch.deb
@@ -600,17 +611,18 @@ Vagrant.configure("2") do |config|
 #############################################
     
     config.vm.define "ubuntu-02" do |vm7|
-      	vm7.vm.network :forwarded_port, guest: 22, host: 2206, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+      	vm7.vm.network :forwarded_port, guest: 22, host: 2207, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm7.vm.network :forwarded_port, guest: 80, host: 8087, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm7.vm.hostname = "ubuntu-02.vsl.lab"
       	vm7.vm.box = "bento/ubuntu-18.04"
       	vm7.vm.synced_folder ".", "/vagrant", disabled: true
       	vm7.vm.synced_folder "tmp", "/media/tmp", create: true
         	owner = "vagrant", group = "vboxsf"
       	vm7.vm.network "private_network",
-                    	ip: "172.16.100.42",
+                    	ip: "172.16.100.17",
                     	name: "vboxnet0"
       	vm7.vm.provider "virtualbox" do |vb|
-        	vb.name = "Ubuntu_18.x (Client AG06)"
+        	vb.name = "Ubuntu_18.x (Client AG07)"
         	vb.gui = false
         	vb.memory = "1024"
         	vb.cpus = 1
@@ -636,10 +648,14 @@ Vagrant.configure("2") do |config|
           	vb.customize ["modifyvm", :id,
                         "--nictype2", "82540em",
                         "--nic2", "natnetwork",
-					  	"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
-                     	]
-      	end
+					  	"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
+						]					 
+      		end
+		vm7.vm.provision "shell", inline: <<-SHELL
+		  	apt update
+			apt install -y linux-headers-generic dkms
+		  	SHELL
       	vm7.vm.provision "shell", inline: $puppet_hosts
       	vm7.vm.provision "shell", inline: <<-SHELL
           	wget https://apt.puppetlabs.com/puppet6-release-stretch.deb
@@ -677,15 +693,18 @@ Vagrant.configure("2") do |config|
 #############################################
 
     config.vm.define "suse-01" do |vm8|
-      	vm8.vm.network :forwarded_port, guest: 22, host: 2207, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+      	vm8.vm.network :forwarded_port, guest: 22, host: 2208, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm8.vm.network :forwarded_port, guest: 80, host: 8088, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
       	vm8.vm.hostname = "suse-01.vsl.lab"
-      	vm8.vm.box = "opensuse/Leap-15.2.x86_64"
+      	vm8.vm.box = "bento/opensuse-leap-15"
       	vm8.vm.synced_folder ".", "/vagrant", disabled: true
+     	vm8.vm.synced_folder "tmp", "/media/tmp", create: true
+        	owner = "vagrant", group = "vboxsf"
       	vm8.vm.network "private_network",
-                    	ip: "172.16.100.51",
+                    	ip: "172.16.100.18",
                     	name: "vboxnet0"
       	vm8.vm.provider "virtualbox" do |vb|
-          	vb.name = "openSUSE_15.x (Client AG07)"
+          	vb.name = "openSUSE_15.x (Client AG08)"
           	vb.gui = false
           	vb.memory = "1024"
           	vb.cpus = 1
@@ -711,17 +730,19 @@ Vagrant.configure("2") do |config|
           	vb.customize ["modifyvm", :id,
                         "--nictype2", "82540em",
                         "--nic2", "natnetwork",
-					  	"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+					  	"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
                      	]
-      	end
-      	vm8.vm.synced_folder "tmp", "/media/tmp", create: true
-        	owner = "vagrant", group = "vboxsf"
+      		end
+		vm8.vm.provision "shell", inline: <<-SHELL
+		  	zypper -n up
+			zypper -n in kernel-default-devel kernel-devel
+		  	SHELL
       	vm8.vm.provision "shell", inline: $puppet_hosts
       	vm8.vm.provision "shell", inline: <<-SHELL
           	zypper in -y wget nano bind-utils dnsmasq
           	SHELL
-      	vm8.vm.provision "shell", inline: $puppet_suse
+      	vm8.vm.provision "shell", inline: $puppet_susev
       	vm8.vm.provision "shell", inline: $dnsmasq_conf
       	vm8.vm.provision "shell", inline: <<-SHELL
           	echo starting DNS MASQ Service
@@ -752,15 +773,18 @@ Vagrant.configure("2") do |config|
 #############################################
 
 	config.vm.define "suse-02" do |vm9|
-		vm9.vm.network :forwarded_port, guest: 22, host: 2208, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm9.vm.network :forwarded_port, guest: 22, host: 2209, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm9.vm.network :forwarded_port, guest: 80, host: 8089, host_ip: "0.0.0.0", id: "http/https", auto_correct: true
 		vm9.vm.hostname = "suse-02.vsl.lab"
 		vm9.vm.box = "opensuse/Leap-15.2.x86_64"
 		vm9.vm.synced_folder ".", "/vagrant", disabled: true
+		vm9.vm.synced_folder "tmp", "/media/tmp", create: true
+	  		owner = "vagrant", group = "vboxsf"
 		vm9.vm.network "private_network",
-				  		ip: "172.16.100.52",
+				  		ip: "172.16.100.19",
 				  		name: "vboxnet0"
 		vm9.vm.provider "virtualbox" do |vb|
-			vb.name = "openSUSE_15.x (Client AG08)"
+			vb.name = "openSUSE_15.x (Client AG09)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
@@ -786,15 +810,17 @@ Vagrant.configure("2") do |config|
 			vb.customize ["modifyvm", :id,
 					  	"--nictype2", "82540em",
 					  	"--nic2", "natnetwork",
-					  	"--nat-network1", "Puppet_Network",
-						"--nicpromisc3", "allow-all"
+					  	"--nat-network2", "Puppet_Network",
+						"--nicpromisc2", "allow-all"
 				   		]
 			end
-		vm9.vm.synced_folder "tmp", "/media/tmp", create: true
-	  		owner = "vagrant", group = "vboxsf"
+		vm9.vm.provision "shell", inline: <<-SHELL
+			zypper -n up
+		  	zypper -n in kernel-default-devel kernel-devel
+			SHELL
 		vm9.vm.provision "shell", inline: $puppet_hosts
 		vm9.vm.provision "shell", inline: <<-SHELL
-			zypper in -y wget nano bind-utils dnsmasq
+			zypper -n in wget nano bind-utils dnsmasq
 			SHELL
 		vm9.vm.provision "shell", inline: $puppet_suse
 		vm9.vm.provision "shell", inline: $dnsmasq_conf
@@ -820,7 +846,7 @@ Vagrant.configure("2") do |config|
 			echo ...
 			echo Done.
 			SHELL
-  	end
+  		end
 
 #############################################
 #          PUPPET AGENT PreVue              #
@@ -828,14 +854,18 @@ Vagrant.configure("2") do |config|
 
 	config.vm.define "pvu-99" do |vm99|
 		vm99.vm.network :forwarded_port, guest: 22, host: 2299, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm99.vm.network :forwarded_port, guest: 80, host: 8099, host_ip: "0.0.0.0", id: "http/https", auto_correct: true		
 		vm99.vm.hostname = "pvu-99" 
 		vm99.vm.box = "bento/rockylinux-8.4"
 		vm99.vm.synced_folder ".", "/vagrant", disabled: true
+		vm99.vm.synced_folder "tmp", "/media/tmp", create: true
+			owner = "vagrant", group = "vboxsf"
 	# Rocky Linux Guest Additions Failure to load...
 	# Run as root: yum install elfutils-libelf-devel -y
 		vm99.vm.network "private_network",
 				  		ip: "172.16.100.99",
-				  		name: "vboxnet0"
+	              		name: "vboxnet0"                                # macOS/Linux Naming Schema
+	#					name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm99.vm.provider "virtualbox" do |vb|
 			vb.name = "PVU_99 (Client AG99)"
 			vb.gui = false
@@ -863,15 +893,13 @@ Vagrant.configure("2") do |config|
 			vb.customize ["modifyvm", :id,
 					  	"--nictype2", "82540em",
 					  	"--nic2", "natnetwork",
-					  	"--nat-network1", "Puppet_Network",
-					  	"--nicpromisc3", "allow-all"
+					  	"--nat-network2", "Puppet_Network",
+					  	"--nicpromisc2", "allow-all"
 				   		]
 			end
-		vm99.vm.synced_folder "tmp", "/media/tmp", create: true
-	  		owner = "vagrant", group = "vboxsf"
 		vm99.vm.provision "shell", inline: $puppet_hosts
 		vm99.vm.provision "shell", inline: <<-SHELL
-			yum in -y wget nano bind-utils dnsmasq
+			yum install -y wget nano bind-utils dnsmasq
 			SHELL
 		vm99.vm.provision "shell", inline: $puppet_path
 		vm99.vm.provision "shell", inline: $dnsmasq_conf
