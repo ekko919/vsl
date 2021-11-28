@@ -135,8 +135,8 @@ Vagrant.configure("2") do |config|
     	vm1.vm.provider "virtualbox" do |vb|
       		vb.name = "CentOS_7.x (Otto SVR)"
       		vb.gui = false
-      		vb.memory = "1024"
-      		vb.cpus = 1
+      		vb.memory = "2048"
+      		vb.cpus = 2
       		vb.customize ["modifyvm", :id,
                     	"--vram", 
                    	 	"128"
