@@ -624,7 +624,7 @@ Vagrant.configure("2") do |config|
     
 	config.vm.define "ubuntu-02" do |vm7|
 		vm7.vm.network :forwarded_port, guest: 22, host: 2207, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-		vm7.vm.network :forwarded_port, guest: 80, host: 8081, host_ip: "0.0.0.0", id: "http", auto_correct: true
+		vm7.vm.network :forwarded_port, guest: 80, host: 8017, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm7.vm.network :forwarded_port, guest: 443, host: 17443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm7.vm.hostname = "ubuntu-02.vsl.lab"
 		vm7.vm.box = "bento/ubuntu-18.04"
@@ -709,7 +709,7 @@ Vagrant.configure("2") do |config|
 	config.vm.define "suse-01" do |vm8|
 		vm8.vm.network :forwarded_port, guest: 22, host: 2208, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm8.vm.network :forwarded_port, guest: 80, host: 8018, host_ip: "0.0.0.0", id: "http", auto_correct: true
-		vm8.vm.network :forwarded_port, guest: 443, host: 19443, host_ip: "0.0.0.0", id: "https", auto_correct: true
+		vm8.vm.network :forwarded_port, guest: 443, host: 18443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm8.vm.hostname = "suse-01.vsl.lab"
 		vm8.vm.box = "bento/opensuse-leap-15"
 		vm8.vm.synced_folder ".", "/vagrant", disabled: true
