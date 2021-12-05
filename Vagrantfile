@@ -119,7 +119,7 @@ Vagrant.configure("2") do |config|
 #############################################
   	
 	config.vm.define "otto-svr" do |vm1|
-  		vm1.vm.network :forwarded_port, guest: 22, host: 2201, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+  		vm1.vm.network :forwarded_port, guest: 22, host: 2211, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm1.vm.network :forwarded_port, guest: 80, host: 8011, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm1.vm.network :forwarded_port, guest: 443, host: 11443, host_ip: "0.0.0.0", id: "https", auto_correct: true
     	vm1.vm.hostname = "otto-svr.vsl.lab"
@@ -215,7 +215,7 @@ Vagrant.configure("2") do |config|
 #############################################
     
 	config.vm.define "centos-01" do |vm2|
-		vm2.vm.network :forwarded_port, guest: 22, host: 2202, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm2.vm.network :forwarded_port, guest: 22, host: 2212, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm2.vm.network :forwarded_port, guest: 80, host: 8012, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm2.vm.network :forwarded_port, guest: 443, host: 12443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm2.vm.hostname = "centos-01.vsl.lab"
@@ -228,7 +228,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm2.vm.provider "virtualbox" do |vb|
-			vb.name = "CentOS_7.x (Client AG02)"
+			vb.name = "CentOS_7.x (Client AG12)"
 			vb.gui = false
 			vb.memory = "2048"
 			vb.cpus = 1
@@ -294,7 +294,7 @@ Vagrant.configure("2") do |config|
 #############################################
     
 	config.vm.define "centos-02" do |vm3|
-		vm3.vm.network :forwarded_port, guest: 22, host: 2203, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm3.vm.network :forwarded_port, guest: 22, host: 2213, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm3.vm.network :forwarded_port, guest: 80, host: 8013, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm3.vm.network :forwarded_port, guest: 443, host: 13443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm3.vm.hostname = "centos-02.vsl.lab"
@@ -307,7 +307,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm3.vm.provider "virtualbox" do |vb|
-			vb.name = "CentOS_7.x (Client AG03)"
+			vb.name = "CentOS_7.x (Client AG13)"
 			vb.gui = false
 			vb.memory = "2048"
 			vb.cpus = 1
@@ -373,7 +373,7 @@ Vagrant.configure("2") do |config|
 #############################################
     
 	config.vm.define "oracle-01" do |vm4|
-		vm4.vm.network :forwarded_port, guest: 22, host: 2204, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm4.vm.network :forwarded_port, guest: 22, host: 2214, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm4.vm.network :forwarded_port, guest: 80, host: 8014, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm4.vm.network :forwarded_port, guest: 443, host: 14443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm4.vm.hostname = "oracle-01.vsl.lab"
@@ -386,7 +386,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm4.vm.provider "virtualbox" do |vb|
-			vb.name = "Oracle Linux 7.x (Client AG04)"
+			vb.name = "Oracle Linux 7.x (Client AG14)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
@@ -453,7 +453,7 @@ Vagrant.configure("2") do |config|
 #############################################
     
 	config.vm.define "oracle-02" do |vm5|
-		vm5.vm.network :forwarded_port, guest: 22, host: 2205, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm5.vm.network :forwarded_port, guest: 22, host: 2215, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm5.vm.network :forwarded_port, guest: 80, host: 8015, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm5.vm.network :forwarded_port, guest: 443, host: 15443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm5.vm.hostname = "oracle-02.vsl.lab"
@@ -466,7 +466,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm5.vm.provider "virtualbox" do |vb|
-			vb.name = "Oracle Linux 7.x (Client AG05)"
+			vb.name = "Oracle Linux 7.x (Client AG15)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
@@ -539,7 +539,7 @@ Vagrant.configure("2") do |config|
 #############################################
     
 	config.vm.define "ubuntu-01" do |vm6|
-		vm6.vm.network :forwarded_port, guest: 22, host: 2206, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm6.vm.network :forwarded_port, guest: 22, host: 2216, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm6.vm.network :forwarded_port, guest: 80, host: 8016, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm6.vm.network :forwarded_port, guest: 443, host: 16443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm6.vm.hostname = "ubuntu-01.vsl.lab"
@@ -552,7 +552,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm6.vm.provider "virtualbox" do |vb|
-			vb.name = "Ubuntu_18.x (Client AG06)"
+			vb.name = "Ubuntu_18.x (Client AG16)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
@@ -623,7 +623,7 @@ Vagrant.configure("2") do |config|
 #############################################
     
 	config.vm.define "ubuntu-02" do |vm7|
-		vm7.vm.network :forwarded_port, guest: 22, host: 2207, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm7.vm.network :forwarded_port, guest: 22, host: 2217, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm7.vm.network :forwarded_port, guest: 80, host: 8017, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm7.vm.network :forwarded_port, guest: 443, host: 17443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm7.vm.hostname = "ubuntu-02.vsl.lab"
@@ -636,7 +636,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm7.vm.provider "virtualbox" do |vb|
-			vb.name = "Ubuntu_18.x (Client AG07)"
+			vb.name = "Ubuntu_18.x (Client AG17)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
@@ -707,7 +707,7 @@ Vagrant.configure("2") do |config|
 #############################################
 
 	config.vm.define "suse-01" do |vm8|
-		vm8.vm.network :forwarded_port, guest: 22, host: 2208, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm8.vm.network :forwarded_port, guest: 22, host: 2218, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm8.vm.network :forwarded_port, guest: 80, host: 8018, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm8.vm.network :forwarded_port, guest: 443, host: 18443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm8.vm.hostname = "suse-01.vsl.lab"
@@ -720,7 +720,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm8.vm.provider "virtualbox" do |vb|
-			vb.name = "openSUSE_15.x (Client AG08)"
+			vb.name = "openSUSE_15.x (Client AG18)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
@@ -789,7 +789,7 @@ Vagrant.configure("2") do |config|
 #############################################
 
 	config.vm.define "suse-02" do |vm9|
-		vm9.vm.network :forwarded_port, guest: 22, host: 2209, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
+		vm9.vm.network :forwarded_port, guest: 22, host: 2219, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm9.vm.network :forwarded_port, guest: 80, host: 8019, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm9.vm.network :forwarded_port, guest: 443, host: 19443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm9.vm.hostname = "suse-02.vsl.lab"
@@ -802,7 +802,7 @@ Vagrant.configure("2") do |config|
 						name: "vboxnet0"                                # macOS/Linux Naming Schema
 #						name: "VirtualBox Host-Only Ethernet Adapter"   # Windows Network Naming Schema
 		vm9.vm.provider "virtualbox" do |vb|
-			vb.name = "openSUSE_15.x (Client AG09)"
+			vb.name = "openSUSE_15.x (Client AG19)"
 			vb.gui = false
 			vb.memory = "1024"
 			vb.cpus = 1
