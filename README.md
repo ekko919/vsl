@@ -22,7 +22,7 @@ These steps may work with other operating systems, but have only been tested wit
 
 **NOTE: on MacOS, don't forget to go to `System Preferences > Privacy > Accessibility` and give Virtual Box permission.**
 
-##### First..
+#### First..
 
 Create the config file `/etc/vbox/networks.conf` and add the following entry:
 
@@ -31,7 +31,7 @@ Remote Host-Only Network IP Restriction(s)
 * 0.0.0.0/0 ::/0
 ```
 
-##### Next..
+#### Next..
 
 1. Run Virtual Box, and go to `File > Host Network Manager`.
 2. Click the icon to create a new adapter. Leave the default name of `vboxnet0`.
