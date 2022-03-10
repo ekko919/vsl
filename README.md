@@ -1,6 +1,6 @@
 # vsl
 
-# Initial Setup
+# Setup
 
 To get up and running you will need the following installed:
 
@@ -22,12 +22,16 @@ These steps may work with other operating systems, but have only been tested wit
 
 **NOTE: on MacOS, don't forget to go to `System Preferences > Privacy > Accessibility` and give Virtual Box permission.**
 
+##### First..
+
 Create the config file `/etc/vbox/networks.conf` and add the following entry:
 
 ```
 Remote Host-Only Network IP Restriction(s)
 * 0.0.0.0/0 ::/0
 ```
+
+##### Next..
 
 1. Run Virtual Box, and go to `File > Host Network Manager`.
 2. Click the icon to create a new adapter. Leave the default name of `vboxnet0`.
@@ -42,7 +46,27 @@ Remote Host-Only Network IP Restriction(s)
 
 <br/>
 
-### Accessing Services on VMs from Host: Port Forwarding
+## Clone and Run
+
+After the above configuration steps are completed, you should be ready to run the `vsl` environment.
+
+#### Imporant note about cloning:
+
+`vsl` should be cloned into the following directory structure on your machine. It is important to use this exact structure, where `~` is your home directory:
+
+`~/My Documents/VM_Share/Projects`
+
+`vsl` should be cloned into `Projects` directory shown above. After `vsl` is cloned, the end result should look like this:
+
+`~/My Documents/VM_Share/Projects/vsl`
+
+<br/>
+
+##### You should now be ready to run vagrant commands in the `vsl` environment
+
+<br/>
+
+# Accessing Services on VMs from Host: Port Forwarding
 
 _coming soon..._
 
