@@ -2,13 +2,13 @@
 
 # Setup
 
-To get up and running you will need the following installed:
+Make sure the following are installed on your machine:
 
 1. [Virtual Box](https://www.virtualbox.org/)
 2. [Virtual Box Guest Addtions](https://download.virtualbox.org/virtualbox/6.1.32/Oracle_VM_VirtualBox_Extension_Pack-6.1.32.vbox-extpack)
 3. [Vagrant](https://www.vagrantup.com/downloads)
 
-To install `Virtual Box Guest Addtions` (_after_ installing Virtual Box):
+A little extra on installing `Virtual Box Guest Addtions` (_after_ installing Virtual Box):
 
 Visit https://www.virtualbox.org/wiki/Downloads.
 
@@ -33,16 +33,16 @@ Remote Host-Only Network IP Restriction(s)
 
 #### Next..
 
-1. Run Virtual Box, and go to `File > Host Network Manager`.
+1. Run Virtual Box and go to `File > Host Network Manager`.
 2. Click the icon to create a new adapter. Leave the default name of `vboxnet0`.
-3. Disable DHCP Server on this adapter.
+3. Disable DHCP Server on this adapter by un-checking the box.
 4. Click the icon to go to `Properties`.
 5. At the bottom, choose _Configure Adapater Manually_.
 6. Change the `IPv4 Address` to `172.16.100.1`.
 7. Leave the subnet mask at `255.255.255.0`.
 8. Hit _Apply_.
 
-**Note: you may have to do this process and hit _Apply_ a couple times for this to "stick", because of a bug in Virtual Box GUI.**
+**Note: you may have to do this process and hit _Apply_ a couple times for this change to "stick" because of a bug in Virtual Box GUI.**
 
 <br/>
 
@@ -63,6 +63,8 @@ After the above configuration steps are completed, you should be ready to run th
 <br/>
 
 ##### You should now be ready to run vagrant commands in the `vsl` environment
+
+You must be in the `vsl` directory to run vagrant commands against the `vsl` environment.
 
 <br/>
 
