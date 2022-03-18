@@ -12,11 +12,15 @@ A little extra on installing `Virtual Box Guest Addtions` (_after_ installing Vi
 
 Visit https://www.virtualbox.org/wiki/Downloads.
 
-Under the heading **VirtualBox 6.1.32 Oracle VM VirtualBox Extension Pack**, find the download link [All supported platforms](https://download.virtualbox.org/virtualbox/6.1.32/Oracle_VM_VirtualBox_Extension_Pack-6.1.32.vbox-extpack).
+Under the heading **VirtualBox Oracle VM VirtualBox Extension Pack**, find the download link [All supported platforms](https://download.virtualbox.org/virtualbox/6.1.32/Oracle_VM_VirtualBox_Extension_Pack-6.1.32.vbox-extpack).
 
 Once downloaded, double click the file to install.
 
 _NOTE: alternatively, the above can all be installed via `homebrew` (MacOS)_
+
+- `brew install --cask virtualbox`
+- `brew install --cask virtualbox-extension-pack`
+- `brew install --cask vagrant`
 
 ## Configuration
 
