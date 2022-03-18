@@ -16,6 +16,8 @@ Under the heading **VirtualBox 6.1.32 Oracle VM VirtualBox Extension Pack**, fin
 
 Once downloaded, double click the file to install.
 
+_NOTE: alternatively, the above can all be installed via `homebrew` (MacOS)_
+
 ## Configuration
 
 These steps may work with other operating systems, but have only been tested with MacOS.
