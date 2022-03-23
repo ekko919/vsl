@@ -28,7 +28,7 @@ These steps may work with other operating systems, but have only been tested wit
 
 **NOTE: on MacOS, don't forget to go to `System Preferences > Privacy > Accessibility` and give Virtual Box permission.**
 
-#### First..
+#### 1. Config File
 
 Create the config file `/etc/vbox/networks.conf` and add the following entry:
 
@@ -37,16 +37,23 @@ Remote Host-Only Network IP Restriction(s)
 * 0.0.0.0/0 ::/0
 ```
 
-#### Next..
+#### 2. Configure Virtual Box Network Adapters
+
+Our GNS3 setup needs to have the `vboxnet0` Virtual Box network adapter with the default configuration, so we will need to create that one first by doing the following:
 
 1. Run Virtual Box and go to `File > Host Network Manager`.
-2. Click the icon to create a new adapter. Leave the default name of `vboxnet1`.
-3. Disable DHCP Server on this adapter by un-checking the box.
-4. Click the icon to go to `Properties`.
-5. At the bottom, choose _Configure Adapater Manually_.
-6. Change the `IPv4 Address` to `172.16.100.1`.
-7. Leave the subnet mask at `255.255.255.0`.
-8. Hit _Apply_.
+2. Click the icon to create a new adapter. Leave the default name of `vboxnet0`.
+3. Leave all default configurations: DHCP should be on, IP address should be `192.168.56.1`, and subnet mask `255.255.255.0`.
+
+Next, while we're still inside the `Host Network Manager` UI, we'll need to create an adapter for the `vsl` environment by doing the following:
+
+1. Click the icon to create a new adapter. Leave the default name of `vboxnet1`.
+2. Disable DHCP Server on this adapter by un-checking the box.
+3. Click the icon to go to `Properties`.
+4. At the bottom, choose _Configure Adapater Manually_.
+5. Change the `IPv4 Address` to `172.16.100.1`.
+6. Leave the subnet mask at `255.255.255.0`.
+7. Hit _Apply_.
 
 **Note: you may have to do this process and hit _Apply_ a couple times for this change to "stick" because of a bug in Virtual Box GUI.**
 
