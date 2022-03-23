@@ -40,7 +40,7 @@ Remote Host-Only Network IP Restriction(s)
 #### Next..
 
 1. Run Virtual Box and go to `File > Host Network Manager`.
-2. Click the icon to create a new adapter. Leave the default name of `vboxnet0`.
+2. Click the icon to create a new adapter. Leave the default name of `vboxnet1`.
 3. Disable DHCP Server on this adapter by un-checking the box.
 4. Click the icon to go to `Properties`.
 5. At the bottom, choose _Configure Adapater Manually_.
