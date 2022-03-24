@@ -81,6 +81,12 @@ You must be in the `vsl` directory to run vagrant commands against the `vsl` env
 
 <br/>
 
+# GNS3
+
+On MacOS Big Sur or later, you may need to run the following command to open GNS3 2.2.8, instead of using the MacOS app launcher GUI:
+
+`QT_MAC_WANTS_LAYER=1 open -a GNS3.app`
+
 # Accessing Services on VMs from Host: Port Forwarding
 
 _coming soon..._
