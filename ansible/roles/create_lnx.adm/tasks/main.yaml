@@ -1,0 +1,10 @@
+---
+
+- name: create lnx.adm
+  ansible.builtin.user:
+    name: lnx.adm
+    password: "{{ pw }}"
+    shell: /bin/bash
+    groups: 'sudo'
+    state: present
+    update_password: on_create

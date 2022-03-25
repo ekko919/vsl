@@ -1,0 +1,7 @@
+---
+
+- name: APT - Update packages
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: safe
+    state: latest

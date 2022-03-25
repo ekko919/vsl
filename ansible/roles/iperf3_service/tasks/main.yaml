@@ -1,0 +1,23 @@
+---
+
+# make sure iperf3 is installed
+- name: INSTALL - iperf3
+  ansible.builtin.apt:
+    update_cache: yes
+    name: iperf3
+    state: present
+
+- name: create iperf3.service unit file
+  ansible.builtin.template: 
+    src: iperf3.service.j2 
+    dest: /etc/systemd/system/iperf3.service
+    owner: root
+    group: root
+    mode: '644'
+
+- name: start iperf3 service and enable at boot
+  ansible.builtin.systemd:
+    name: iperf3.service
+    enabled: yes
+    state: restarted
+    daemon_reload: yes

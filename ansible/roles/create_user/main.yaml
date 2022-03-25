@@ -1,0 +1,9 @@
+---
+
+- name: create user {{ name }}
+  ansible.builtin.user:
+    name: "{{ username }}"
+    password: "{{ pw }}"
+    shell: /bin/bash
+    state: present
+    update_password: on_create

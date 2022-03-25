@@ -1,0 +1,85 @@
+all:
+  hosts:
+    otto-svr:
+      ansible_host: 127.0.0.1
+      ansible_port: 2211
+      ansible_user: vagrant
+    centos-01:
+      ansible_host: 127.0.0.1
+      ansible_port: 2212
+      ansible_user: vagrant
+    centos-02:
+      ansible_host: 127.0.0.1
+      ansible_port: 2213
+      ansible_user: vagrant
+    oracle-01:
+      ansible_host: 127.0.0.1
+      ansible_port: 2214
+      ansible_user: vagrant
+    oracle-02: 
+      ansible_host: 127.0.0.1
+      ansible_port: 2215
+      ansible_user: vagrant
+    ubuntu-01:
+      ansible_host: 127.0.0.1
+      ansible_port: 2216
+      ansible_user: vagrant
+    ubuntu-02:
+      ansible_host: 127.0.0.1
+      ansible_port: 2217
+      ansible_user: vagrant
+    suse-01:
+      ansible_host: 127.0.0.1
+      ansible_port: 2218
+      ansible_user: vagrant
+    suse-02:
+      ansible_host: 127.0.0.1
+      ansible_port: 2219
+      ansible_user: vagrant
+    pvu-99:
+      ansible_host: 127.0.0.1
+      ansible_port: 2299
+      ansible_user: vagrant    
+    children:
+      vsl:
+        hosts:
+          otto-svr:
+            ansible_host: 127.0.0.1
+            ansible_port: 2211
+            ansible_user: vagrant
+          centos-01:
+            ansible_host: 127.0.0.1
+            ansible_port: 2212
+            ansible_user: vagrant
+          centos-02:
+            ansible_host: 127.0.0.1
+            ansible_port: 2213
+            ansible_user: vagrant
+          oracle-01:
+            ansible_host: 127.0.0.1
+            ansible_port: 2214
+            ansible_user: vagrant
+          oracle-02: 
+            ansible_host: 127.0.0.1
+            ansible_port: 2215
+            ansible_user: vagrant
+          ubuntu-01:
+            ansible_host: 127.0.0.1
+            ansible_port: 2216
+            ansible_user: vagrant
+          ubuntu-02:
+            ansible_host: 127.0.0.1
+            ansible_port: 2217
+            ansible_user: vagrant
+          suse-01:
+            ansible_host: 127.0.0.1
+            ansible_port: 2218
+            ansible_user: vagrant
+          suse-02:
+            ansible_host: 127.0.0.1
+            ansible_port: 2219
+            ansible_user: vagrant
+          pvu-99:
+            ansible_host: 127.0.0.1
+            ansible_port: 2299
+            ansible_user: vagrant

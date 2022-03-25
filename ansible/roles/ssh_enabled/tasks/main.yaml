@@ -1,0 +1,7 @@
+---
+
+- name: SSH - Start on boot
+  ansible.builtin.service:
+    name: sshd
+    enabled: yes
+    state: started
