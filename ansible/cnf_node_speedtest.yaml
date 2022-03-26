@@ -1,14 +1,14 @@
-# RUN: ansible-playbook speedtest_mini_box.yaml  -i inventory.yaml -K
+# RUN: ansible-playbook cnf_node_speedtest.yaml  -i inventory.yaml -K
 # run with -K to enter priv escalation password
 ---
 - name: Client test machines setup
-  hosts: 
+  hosts: ubuntu-01
   roles:
     - role: set_hostname
       vars:
         host_name: 
-    - ssh_enabled
     - apt_upgrade
+    - ssh_enabled
     - iperf3_service
   become: yes
   tasks:
