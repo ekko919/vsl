@@ -1,0 +1,9 @@
+---
+
+- name: create lnx.mgr
+  ansible.builtin.user:
+    name: lnx.mgr
+    password: "{{ pw }}"
+    shell: /bin/bash
+    state: present
+    update_password: on_create

@@ -1,0 +1,13 @@
+---
+- name: lnx user setup | create std users and disable root ssh
+  hosts: 
+  roles:
+    - role: usr_lnx.adm
+      vars: pw=$6$zjRlQLsmgqJWHsWH$dyyIch2ie7QXNGf9d0J6AK.T6wh1.WURWeNvdQlpRWNIKXF6MzVRf6nk59bq1lvalJpeX/HjB59S3x72RUG18.
+    - role: usr_lnx.mgr
+      vars: pw=$6$zjRlQLsmgqJWHsWH$dyyIch2ie7QXNGf9d0J6AK.T6wh1.WURWeNvdQlpRWNIKXF6MzVRf6nk59bq1lvalJpeX/HjB59S3x72RUG18.
+    - role: usr_lnx.usr
+      vars: pw=$6$zjRlQLsmgqJWHsWH$dyyIch2ie7QXNGf9d0J6AK.T6wh1.WURWeNvdQlpRWNIKXF6MzVRf6nk59bq1lvalJpeX/HjB59S3x72RUG18.
+    - role: disable_root_ssh
+  become: yes
+  tasks:
