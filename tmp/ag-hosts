@@ -14,7 +14,6 @@
 172.16.100.17   ubuntu-02.vsl.lab           ubuntu-02
 172.16.100.18   suse-01.vsl.lab             suse-01
 172.16.100.19   suse-02.vsl.lab             suse-02
-172.16.100.98   pvu-98.vsl.lab              pvu-98
 172.16.100.99   pvu-99.vsl.lab              pvu-99
 
 ### vagrant-hostmanager-end ###

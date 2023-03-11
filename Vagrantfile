@@ -9,32 +9,38 @@
 #############################################
 #           VAGRANT GUEST SCRIPTS           #
 #############################################
-$disable_ipv6 = <<-SCRIPT
-echo Disable IPv6 Listener
-cp /media/tmp/sysctl.conf /etc/sysctl.conf
-awk 'NR==18 {$0="AddressFamily inet"} 1' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp
-mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config
+$puppet_path = <<-SCRIPT
+echo Setting Puppet PATH
+export PATH=/opt/puppetlabs/bin:$PATH
 SCRIPT
 
 ###############################
-$dnsmasq_conf = <<-SCRIPT
-echo Provisioning DNSMASQ file
-rm /etc/dnsmasq.conf
-cp /media/tmp/dnsmasq.conf /etc/dnsmasq.conf
+$puppet_env = <<-SCRIPT
+echo Setting Puppet Enviroment
+rm /etc/puppetlabs
+mkdir /etc/puppetlabs
 SCRIPT
 
 ###############################
+$puppet_suse = <<-SCRIPT
+echo Installing Puppet Repo
+mkdir /root/downloads
+cd /root/downloads
+wget https://yum.puppet.com/puppet6-release-sles-15.noarch.rpm
+zypper --no-gpg-checks in -y puppet6-release-sles-15.noarch.rpm
+SCRIPT
+
+##############################
 $java_adj = <<-'SCRIPT'
 echo Update Java Environment Memory
 awk 'NR==9 {$0="JAVA_ARGS=\"-Xms512m -Xmx512m -Djruby.logger.class=com.puppetlabs.jruby_utils.jruby.Slf4jLogger\""} 1' /etc/sysconfig/puppetserver > /etc/sysconfig/puppetserver.tmp
 mv /etc/sysconfig/puppetserver.tmp /etc/sysconfig/puppetserver
 SCRIPT
 
-###############################
-$ntp_conf = <<-SCRIPT
-echo Provisioning NTP file
-rm /etc/ntp.conf
-cp /media/tmp/ntp.conf /etc/ntp.conf
+##############################
+$puppet_svr_conf = <<-'SCRIPT'
+echo Provisioning puppet.conf
+cp /media/tmp/puppet-svr.conf /etc/puppetlabs/puppet/puppet.conf
 SCRIPT
 
 ##############################
@@ -54,11 +60,11 @@ awk 'NR==2 {$0="[master]"} 1' /etc/puppetlabs/puppet/puppet.tmp > /etc/puppetlab
 mv /etc/puppetlabs/puppet/puppet.tmp1 /etc/puppetlabs/puppet/puppet.conf
 SCRIPT
 
-###############################
-$puppet_env = <<-SCRIPT
-echo Setting Puppet Enviroment
-rm /etc/puppetlabs
-mkdir /etc/puppetlabs
+##############################
+$puppet_svr_hosts = <<-SCRIPT
+echo Provisioning HOSTS file
+rm /etc/hosts
+cp /media/tmp/svr-hosts /etc/hosts
 SCRIPT
 
 ###############################
@@ -68,33 +74,11 @@ rm /etc/hosts
 cp /media/tmp/ag-hosts /etc/hosts
 SCRIPT
 
-##############################
-$puppet_path = <<-SCRIPT
-echo Setting Puppet PATH
-export PATH=/opt/puppetlabs/bin:$PATH
-SCRIPT
-
 ###############################
-$puppet_suse = <<-SCRIPT
-echo Installing Puppet Repo
-mkdir /root/downloads
-cd /root/downloads
-wget https://yum.puppet.com/puppet6-release-sles-15.noarch.rpm
-zypper --no-gpg-checks in -y puppet6-release-sles-15.noarch.rpm
-SCRIPT
-
-##############################
-$puppet_svr_conf = <<-'SCRIPT'
-echo Provisioning puppet.conf
-cp /media/tmp/puppet-svr.conf /etc/puppetlabs/puppet/puppet.conf
-SCRIPT
-
-
-##############################
-$puppet_svr_hosts = <<-SCRIPT
-echo Provisioning HOSTS file
-rm /etc/hosts
-cp /media/tmp/svr-hosts /etc/hosts
+$dnsmasq_conf = <<-SCRIPT
+echo Provisioning DNSMASQ file
+rm /etc/dnsmasq.conf
+cp /media/tmp/dnsmasq.conf /etc/dnsmasq.conf
 SCRIPT
 
 ###############################
@@ -104,35 +88,31 @@ rm /etc/resolv.conf
 cp /media/tmp/resolv.conf /etc/resolv.conf
 SCRIPT
 
+###############################
+$ntp_conf = <<-SCRIPT
+echo Provisioning NTP file
+rm /etc/ntp.conf
+cp /media/tmp/ntp.conf /etc/ntp.conf
+SCRIPT
+
+###############################
+$disable_ipv6 = <<-SCRIPT
+echo Disable IPv6 Listener
+cp /media/tmp/sysctl.conf /etc/sysctl.conf
+awk 'NR==18 {$0="AddressFamily inet"} 1' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp
+mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config
+SCRIPT
+
 #############################################
 #     VAGRANT HOST MANAGER CONFIGURATION    #
 #############################################
 
 Vagrant.configure("2") do |config|
 	config.vm.box_check_update = true
-	config.vm.boot_timeout = 60
+  	#config.ssh.insert_key = false
+  	#config.ssh.private_key_path = ["keys/.ssh/vagrant_rsa", "~/.vagrant.d/insecure_private_key"]
+  	#config.vm.provision "file", source: "keys/.ssh/vagrant_rsa.pub", destination: "~/.ssh/authorized_keys"
 
-	#SSH Key Config
-	config.ssh.forward_agent = false
-	config.ssh.insert_key = false
-	config.ssh.private_key_path = ["keys/.ssh/vagrant.key", "~/.vagrant.d/insecure_private_key"]
-	config.vm.provision "file", source: "keys/.ssh/vagrant.pub", destination: "~/.ssh/authorized_keys"
-
-	# Configure Vagrant-HostManager Plugin
-	if Vagrant.has_plugin? "vagrant-hostmanager"
-		config.hostmanager.enabled = false
-		config.hostmanager.manage_host = true
-		config.hostmanager.ignore_private_ip = false
-		config.hostmanager.include_offline = true
-	end
-
-	# Configure vagrant-vbguest Plugin
-	if Vagrant.has_plugin? "vagrant-vbguest"
-		config.vbguest.iso_path = ["vbguest/VBoxGuestAdditions.iso"]
-		config.vbguest.no_install  = false
-		config.vbguest.auto_update = true
-		config.vbguest.no_remote   = false
-	end
 
 #############################################
 #      AUTOMATION SERVER CONFIGURATION      #
@@ -180,8 +160,8 @@ Vagrant.configure("2") do |config|
                      	]
       		vb.customize ["modifyvm", :id,
      		 		    "--nictype2", "82540em",
-						"--nic2", "natnetwork",
-						"--nat-network2", "Puppet_Network",
+#						"--nic2", "natnetwork",
+#						"--nat-network2", "Puppet_Network",
 						"--nicpromisc2", "allow-all"
 						]
     		end
@@ -192,27 +172,23 @@ Vagrant.configure("2") do |config|
        		yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
        		yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
        		yum -y install nano gcc make perl kernel-devel
-       		yum -y install bind-utils ntp
+       		yum -y install dnsmasq bind-utils ntp
        		yum -y install puppetserver
        		systemctl set-default multi-user.target
       		SHELL
     	vm1.vm.provision "shell", inline: $puppet_path
     	vm1.vm.provision "shell", inline: $java_adj
     	vm1.vm.provision "shell", inline: $puppet_svr_conf
+    	vm1.vm.provision "shell", inline: $dnsmasq_conf
     	vm1.vm.provision "shell", inline: $resolv_conf
     	vm1.vm.provision "shell", inline: $ntp_conf
     	vm1.vm.provision "shell", inline: <<-SHELL
-			yum -y install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
-			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
-			systemctl start dnsmasq
-			systemctl enable dnsmasq
-			echo ...
-			echo Done.
-			SHELL
+       		echo starting DNS MASQ Service
+       		systemctl start dnsmasq
+       		systemctl enable dnsmasq
+       		echo ...
+       		echo Done.
+       		SHELL
        	vm1.vm.provision "shell", inline: <<-SHELL
        		echo 'setting TimeZone & NTP Services'
        		timedatectl set-timezone America/New_York
@@ -245,7 +221,7 @@ Vagrant.configure("2") do |config|
 		vm2.vm.network :forwarded_port, guest: 80, host: 8012, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm2.vm.network :forwarded_port, guest: 443, host: 12443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm2.vm.hostname = "centos-01.vsl.lab"
-		vm2.vm.box = "bento/centos-8"
+		vm2.vm.box = "bento/centos-7.9"
 		vm2.vm.synced_folder ".", "/vagrant", disabled: true 
 		vm2.vm.synced_folder "tmp", "/media/tmp", create: true
 			owner = "vagrant", group = "vboxsf"
@@ -256,8 +232,8 @@ Vagrant.configure("2") do |config|
 		vm2.vm.provider "virtualbox" do |vb|
 			vb.name = "CentOS_7.x (Client AG12)"
 			vb.gui = false
-			vb.memory = "4096"
-			vb.cpus = 4
+			vb.memory = "2048"
+			vb.cpus = 1
 			vb.customize ["modifyvm", :id,
 						"--vram", 
 						"128"
@@ -289,18 +265,14 @@ Vagrant.configure("2") do |config|
 			yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
 			yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 			yum -y install nano gcc make perl kernel-devel
-			yum -y install bind-utils
+			yum -y install dnsmasq bind-utils
 			yum -y install puppet
 			systemctl set-default multi-user.target
 			SHELL
 		vm2.vm.provision "shell", inline: $puppet_path
+		vm2.vm.provision "shell", inline: $dnsmasq_conf
 		vm2.vm.provision "shell", inline: <<-SHELL
-			yum -y install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -372,18 +344,14 @@ Vagrant.configure("2") do |config|
 			yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
 			yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 			yum -y install nano gcc make perl kernel-devel
-			yum -y install bind-utils
+			yum -y install dnsmasq bind-utils
 			yum -y install puppet
 			systemctl set-default multi-user.target
 			SHELL
 		vm3.vm.provision "shell", inline: $puppet_path
+		vm3.vm.provision "shell", inline: $dnsmasq_conf
 		vm3.vm.provision "shell", inline: <<-SHELL
-			yum -y install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -455,18 +423,14 @@ Vagrant.configure("2") do |config|
 			yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
 			yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 			yum -y install nano gcc make perl kernel-devel
-			yum -y install bind-utils
+			yum -y install dnsmasq bind-utils
 			yum -y install puppet
 			systemctl set-default multi-user.target
 			SHELL
 		vm4.vm.provision "shell", inline: $puppet_path
+		vm4.vm.provision "shell", inline: $dnsmasq_conf
 		vm4.vm.provision "shell", inline: <<-SHELL
-			yum -y install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -545,18 +509,14 @@ Vagrant.configure("2") do |config|
 			yum -y install http://yum.puppetlabs.com/puppet6-release-el-7.noarch.rpm
 			yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 			yum -y install nano gcc make perl kernel-devel
-			yum -y install bind-utils
+			yum -y install dnsmasq bind-utils
 			yum -y install puppet
 			systemctl set-default multi-user.target
 			SHELL
 		vm5.vm.provision "shell", inline: $puppet_path
+		vm5.vm.provision "shell", inline: $dnsmasq_conf
 		vm5.vm.provision "shell", inline: <<-SHELL
-			yum -y install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -586,7 +546,6 @@ Vagrant.configure("2") do |config|
 		vm6.vm.network :forwarded_port, guest: 443, host: 16443, host_ip: "0.0.0.0", id: "https", auto_correct: true
 		vm6.vm.hostname = "ubuntu-01.vsl.lab"
 		vm6.vm.box = "bento/ubuntu-18.04"
-#		vm6.vm.box = "ekko919/Ubuntu-18.x"
 		vm6.vm.synced_folder ".", "/vagrant", disabled: true
 		vm6.vm.synced_folder "tmp", "/media/tmp", create: true
 			owner = "vagrant", group = "vboxsf"
@@ -620,8 +579,8 @@ Vagrant.configure("2") do |config|
 						]
 			vb.customize ["modifyvm", :id,
 						"--nictype2", "82540em",
-						"--nic2", "natnetwork",
-						"--nat-network2", "Puppet_Network",
+#						"--nic2", "natnetwork",
+#						"--nat-network2", "Puppet_Network",
 						"--nicpromisc2", "allow-all"
 						]
 			end
@@ -636,17 +595,13 @@ Vagrant.configure("2") do |config|
 			apt-get update
 			apt-get install -y puppet-agent
 			apt-get install nano gcc make perl linux-headers-$(uname -r) -y
-			apt-get install bind9utils -y
+			apt-get install dnsmasq bind9utils -y
 			systemctl set-default multi-user.target
 			SHELL
 		vm6.vm.provision "shell", inline: $puppet_path
+		vm6.vm.provision "shell", inline: $dnsmasq_conf
 		vm6.vm.provision "shell", inline: <<-SHELL
-			apt-get install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -724,17 +679,13 @@ Vagrant.configure("2") do |config|
 			apt-get update
 			apt-get install -y puppet-agent
 			apt-get install nano gcc make perl linux-headers-$(uname -r) -y
-			apt-get install bind9utils -y
+			apt-get install dnsmasq bind9utils -y
 			systemctl set-default multi-user.target
 			SHELL
 		vm7.vm.provision "shell", inline: $puppet_path
+		vm7.vm.provision "shell", inline: $dnsmasq_conf
 		vm7.vm.provision "shell", inline: <<-SHELL
-			apt-get install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -807,16 +758,12 @@ Vagrant.configure("2") do |config|
 			SHELL
 		vm8.vm.provision "shell", inline: $puppet_hosts
 		vm8.vm.provision "shell", inline: <<-SHELL
-			zypper in -y wget nano bind-utils
+			zypper in -y wget nano bind-utils dnsmasq
 			SHELL
 		vm8.vm.provision "shell", inline: $puppet_suse
+		vm8.vm.provision "shell", inline: $dnsmasq_conf
 		vm8.vm.provision "shell", inline: <<-SHELL
-			zypper in -y dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -893,16 +840,12 @@ Vagrant.configure("2") do |config|
 			SHELL
 		vm9.vm.provision "shell", inline: $puppet_hosts
 		vm9.vm.provision "shell", inline: <<-SHELL
-			zypper -n in wget nano bind-utils
+			zypper -n in wget nano bind-utils dnsmasq
 			SHELL
 		vm9.vm.provision "shell", inline: $puppet_suse
+		vm9.vm.provision "shell", inline: $dnsmasq_conf
 		vm9.vm.provision "shell", inline: <<-SHELL
-			zypper in -y dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
@@ -926,122 +869,20 @@ Vagrant.configure("2") do |config|
 		end
 
 #############################################
-#          PUPPET AGENT PreVu 'APT'         #
-#############################################
-    
-	config.vm.define "pvu-98" do |vm98|
-		vm98.vm.network :forwarded_port, guest: 22, host: 2298, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
-		vm98.vm.network :forwarded_port, guest: 80, host: 8098, host_ip: "0.0.0.0", id: "http", auto_correct: true
-		vm98.vm.network :forwarded_port, guest: 443, host: 9843, host_ip: "0.0.0.0", id: "https", auto_correct: true
-		vm98.vm.hostname = "pvu-98.vsl.lab"
-		vm98.vm.box = "local_ub2"
-#		vm98.vm.box = "ekko919/Debian-11.x"
-#		vm98.vm.box = "bento/debian-11.4"
-		vm98.vm.synced_folder ".", "/vagrant", disabled: true
-		vm98.vm.synced_folder "tmp", "/media/tmp", create: true
-			owner = "vagrant", group = "vboxsf"
-		vm98.vm.network "private_network",
-						ip: "172.16.100.98",
-						name: "vboxnet1"                                  # macOS/Linux Naming Schema
-#						name: "VirtualBox Host-Only Ethernet Adapter#2"   # Windows Network Naming Schema
-		vm98.vm.provider "virtualbox" do |vb|
-			vb.name = "PVU_98 (Client AG98)"
-			vb.gui = false
-			vb.memory = "1024"
-			vb.cpus = 1
-			vb.customize ["modifyvm", :id,
-						"--vram", 
-						"16"
-						]
-			vb.customize ["modifyvm", :id,
-						"--nested-hw-virt", 
-						"on"
-						]
-			vb.customize ["modifyvm", :id,
-						"--uart1", 
-						"0x3F8", "4"
-						]
-			vb.customize ["modifyvm", :id, 
-						"--uartmode1", 
-						"file", File::NULL
-						]
-			vb.customize ["storageattach", :id, 
-						"--storagectl", "IDE Controller", 
-						"--port", "0", "--device", "1", 
-						"--type", "dvddrive", 
-						"--medium", "emptydrive"
-						]
-			vb.customize ["modifyvm", :id,
-						"--graphicscontroller", "vmsvga"
-						]
-			vb.customize ["modifyvm", :id,
-						"--audio", "none"
-						]
-			vb.customize ["modifyvm", :id, 
-						"--cableconnected1", "on"
-						]
-			vb.customize ["modifyvm", :id,
-						"--nictype2", "82540em",
-						"--nic2", "natnetwork",
-						"--nat-network2", "Puppet_Network",
-						"--nicpromisc2", "allow-all"
-						]					 
-			end
-		vm98.vm.provision "shell", inline: <<-SHELL
-			apt update
-			apt install -y linux-headers-generic dkms wget
-			SHELL
-		vm98.vm.provision "shell", inline: $puppet_hosts
-		vm98.vm.provision "shell", inline: <<-SHELL
-			wget https://apt.puppetlabs.com/puppet6-release-stretch.deb
-			dpkg -i puppet6-release-stretch.deb
-			apt-get update
-			apt-get install -y puppet-agent
-			apt-get install nano gcc make perl linux-headers-$(uname -r) -y
-			apt-get install bind9utils -y
-			systemctl set-default multi-user.target
-			SHELL
-		vm98.vm.provision "shell", inline: $puppet_path
-		vm98.vm.provision "shell", inline: <<-SHELL
-			apt-get install -y dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
-			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
-			systemctl start dnsmasq
-			systemctl enable dnsmasq
-			echo ...
-			echo Done.
-			SHELL
-		vm98.vm.provision "shell", inline: $resolv_conf
-		vm98.vm.provision "shell", inline: $puppet_conf
-		vm98.vm.provision "shell", inline: <<-SHELL
-			echo starting Puppet Agent
-			systemctl start puppet
-			echo enabling Puppet Agent
-			systemctl enable puppet
-			echo Puppet Agent started and enabled...
-			echo ...
-			echo Done.
-			SHELL
-		end
-
-#############################################
-#          PUPPET AGENT PreVu 'YUM'         #
+#          PUPPET AGENT PreVue              #
 #############################################
 
 	config.vm.define "pvu-99" do |vm99|
 		vm99.vm.network :forwarded_port, guest: 22, host: 2299, host_ip: "0.0.0.0", id: "ssh", auto_correct: true
 		vm99.vm.network :forwarded_port, guest: 80, host: 8099, host_ip: "0.0.0.0", id: "http", auto_correct: true
 		vm99.vm.network :forwarded_port, guest: 443, host: 9943, host_ip: "0.0.0.0", id: "https", auto_correct: true		
-		vm99.vm.hostname = "pvu-99.vsl.lab" 
-		vm99.vm.box = "bento/oracle-8"
+		vm99.vm.hostname = "pvu-99" 
+		vm99.vm.box = "Debian_11"
 		vm99.vm.synced_folder ".", "/vagrant", disabled: true
 		vm99.vm.synced_folder "tmp", "/media/tmp", create: true
 			owner = "vagrant", group = "vboxsf"
-		# Rocky Linux Guest Additions Failure to load...
-		# Run as root: yum install elfutils-libelf-devel -y
+# Rocky Linux Guest Additions Failure to load...
+# Run as root: yum install elfutils-libelf-devel -y
 		vm99.vm.network "private_network",
 						ip: "172.16.100.99",
 						name: "vboxnet1"                                  # macOS/Linux Naming Schema
@@ -1079,16 +920,12 @@ Vagrant.configure("2") do |config|
 			end
 		vm99.vm.provision "shell", inline: $puppet_hosts
 		vm99.vm.provision "shell", inline: <<-SHELL
-			yum install -y wget nano bind-utils
+			yum install -y wget nano bind-utils dnsmasq
 			SHELL
 		vm99.vm.provision "shell", inline: $puppet_path
+		vm99.vm.provision "shell", inline: $dnsmasq_conf
 		vm99.vm.provision "shell", inline: <<-SHELL
-			yum -y install dnsmasq > /dev/null 2>&1 && systemctl stop dnsmasq
 			echo starting DNS MASQ Service
-			systemctl stop systemd-resolved
-			systemctl disable systemd-resolved
-			systemctl mask systemd-resolved
-			$dnsmasq_conf
 			systemctl start dnsmasq
 			systemctl enable dnsmasq
 			echo ...
