@@ -87,8 +87,26 @@ On MacOS Big Sur or later, you may need to run the following command to open GNS
 
 `QT_MAC_WANTS_LAYER=1 open -a GNS3.app`
 
-# Accessing Services on VMs from Host: Port Forwarding
+<br/>
+<br/>
 
-_coming soon..._
+# Puppet Control Node/Agent SSL Auto-Signing
 
-Preferences > Network > Config > Port Forwarding
+`vsl` VMs are pre-configured to use [puppet](https://puppet.com/). The VM named `otto-svr` is the control node, and the rest can be managed/agent nodes. If you would like to bind a node to `otto-svr`, spin up the desired node and then do the following:
+
+`sudo -i`: change to `root` user.
+`puppet agent -t`: this will exchange keys with `otto-svr`, effectively telling `otto-svr` "I will now be a node managed by you."
+
+You should see the following output after running the above:
+
+```
+Info: Using environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Retrieving locales
+Info: Caching catalog for ubuntu-01.vsl.lab
+Info: Applying configuration version '1649196032'
+Notice: Applied catalog in 0.01 seconds
+```
+
+This creates a relationship between `otto-svr` and the other node by setting up SSL keys/information between them.

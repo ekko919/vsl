@@ -2,3 +2,4 @@
 /.vagrant
 /tmp/scripts/wip
 .vscode
+*.iso
